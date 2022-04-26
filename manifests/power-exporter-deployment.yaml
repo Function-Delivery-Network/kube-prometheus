@@ -25,8 +25,16 @@ spec:
         app.kubernetes.io/version: latest
     spec:
       containers:
-      - image: phyz1x/prometheus-power-exporter:latest
+      - env:
+        - name: DEVICE_UDP_IP
+          value: 127.0.0.1
+        - name: DEVICE_UDP_PORT
+          value: "5000"
+        image: phyz1x/prometheus-power-exporter:latest
         name: power-exporter
+        ports:
+        - containerPort: 8000
+          name: http
         resources:
           limits:
             cpu: 250m

@@ -26,21 +26,29 @@ local defaults = {
 };
 
 function(params) {
-  local ne = self,
+  local pe = self,
   _config:: defaults + params,
   // Safety check
-  assert std.isObject(ne._config.resources),
+  assert std.isObject(pe._config.resources),
   _metadata:: {
-    name: ne._config.name,
-    namespace: ne._config.namespace,
-    labels: ne._config.commonLabels,
+    name: pe._config.name,
+    namespace: pe._config.namespace,
+    labels: pe._config.commonLabels,
   },
 
   deployment:
     local powerExporter = {
-      name: ne._config.name,
-      image: ne._config.image,
-      resources: ne._config.resources,
+      name: pe._config.name,
+      image: pe._config.image,
+      ports: [{
+        name: 'http',
+        containerPort: pe._config.port,
+      }],
+      resources: pe._config.resources,
+      env: [
+        { name: 'DEVICE_UDP_IP', value: "127.0.0.1" },
+        { name: 'DEVICE_UDP_PORT', value: "5000" },
+      ],
       securityContext: {
           allowPrivilegeEscalation: false,
           readOnlyRootFilesystem: true,
@@ -51,10 +59,10 @@ function(params) {
     {
       apiVersion: 'apps/v1',
       kind: 'Deployment',
-      metadata: ne._metadata,
+      metadata: pe._metadata,
       spec: {
         selector: {
-          matchLabels: ne._config.selectorLabels,
+          matchLabels: pe._config.selectorLabels,
         },
         updateStrategy: {
           type: 'RollingUpdate',
@@ -65,7 +73,7 @@ function(params) {
             annotations: {
               'kubectl.kubernetes.io/default-container': powerExporter.name,
             },
-            labels: ne._config.commonLabels,
+            labels: pe._config.commonLabels,
           },
           spec: {
             nodeSelector: { 'kubernetes.io/os': 'linux' },
@@ -84,4 +92,49 @@ function(params) {
         },
       },
     },
+
+  service: {
+    apiVersion: 'v1',
+    kind: 'Service',
+    metadata: pe._metadata,
+    spec: {
+      ports: [{
+        name: 'http',
+        port: pe._config.port,
+        targetPort: 'http',
+      }],
+      selector: pe._config.selectorLabels,
+    },
+  },
+
+  serviceMonitor: {
+    apiVersion: 'monitoring.coreos.com/v1',
+    kind: 'ServiceMonitor',
+    metadata: pe._metadata,
+    spec: {
+      jobLabel: 'app.kubernetes.io/name',
+      selector: {
+        matchLabels: pe._config.selectorLabels,
+      },
+      endpoints: [{
+        path: '/metrics',
+        port: 'http',
+        scheme: 'http',
+        interval: '15s',
+        bearerTokenFile: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+        relabelings: [
+          {
+            action: 'replace',
+            regex: '(.*)',
+            replacement: '$1',
+            sourceLabels: ['__meta_kubernetes_pod_node_name'],
+            targetLabel: 'instance',
+          },
+        ],
+        tlsConfig: {
+          insecureSkipVerify: true,
+        },
+      }],
+    },
+  },
 }
