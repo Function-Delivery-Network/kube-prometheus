@@ -7,12 +7,12 @@ local patch(ports) = {
 
 {
   prometheus+: {
-    service+: patch([{ name: 'web', port: 9090, targetPort: 'web', nodePort: 30900 }]),
+    service+: patch([{ name: 'web', port: 9090, targetPort: 'web', nodePort: 30008 }]),
   },
   alertmanager+: {
     service+: patch([{ name: 'web', port: 9093, targetPort: 'web', nodePort: 30903 }]),
   },
   grafana+: {
-    service+: patch([{ name: 'http', port: 3000, targetPort: 'http', nodePort: 30902 }]),
+    service+: patch([{ name: 'http', port: 3000, targetPort: 'http', nodePort: 30009 }]),
   },
 }
