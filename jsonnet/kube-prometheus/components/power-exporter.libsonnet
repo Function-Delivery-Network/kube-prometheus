@@ -64,10 +64,6 @@ function(params) {
         selector: {
           matchLabels: pe._config.selectorLabels,
         },
-        updateStrategy: {
-          type: 'RollingUpdate',
-          rollingUpdate: { maxUnavailable: '10%' },
-        },
         template: {
           metadata: {
             annotations: {
