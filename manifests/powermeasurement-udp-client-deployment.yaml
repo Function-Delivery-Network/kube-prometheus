@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: powermeasurement-client
+    app.kubernetes.io/name: powermeasurement-udp-client
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: latest
+  name: powermeasurement-udp-client
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: powermeasurement-client
+      app.kubernetes.io/name: powermeasurement-udp-client
+      app.kubernetes.io/part-of: kube-prometheus
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: powermeasurement-udp-client
+      labels:
+        app.kubernetes.io/component: powermeasurement-client
+        app.kubernetes.io/name: powermeasurement-udp-client
+        app.kubernetes.io/part-of: kube-prometheus
+        app.kubernetes.io/version: latest
+    spec:
+      containers:
+      - image: phyz1x/powermeasurement-udp-client:latest
+        name: powermeasurement-udp-client
+        resources:
+          limits:
+            cpu: 250m
+            memory: 180Mi
+          requests:
+            cpu: 102m
+            memory: 180Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - SYS_TIME
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      hostNetwork: true
+      hostPID: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      tolerations:
+      - operator: Exists
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 10%
+    type: RollingUpdate

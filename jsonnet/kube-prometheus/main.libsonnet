@@ -5,6 +5,8 @@ local kubernetesControlPlane = import './components/k8s-control-plane.libsonnet'
 local kubeStateMetrics = import './components/kube-state-metrics.libsonnet';
 local customMixin = import './components/mixin/custom.libsonnet';
 local nodeExporter = import './components/node-exporter.libsonnet';
+local powerExporter = import './components/power-exporter.libsonnet';
+local powerMeasurementClient = import './components/powermeasurement-udp-client.libsonnet';
 local prometheusAdapter = import './components/prometheus-adapter.libsonnet';
 local prometheusOperator = import './components/prometheus-operator.libsonnet';
 local prometheus = import './components/prometheus.libsonnet';
@@ -30,6 +32,8 @@ local utils = import './lib/utils.libsonnet';
         grafana: error 'must provide version',
         kubeStateMetrics: error 'must provide version',
         nodeExporter: error 'must provide version',
+        powerMeasurementClient: error 'must provide version',
+        powerExporter: error 'must provide version',
         prometheus: error 'must provide version',
         prometheusAdapter: error 'must provide version',
         prometheusOperator: error 'must provide version',
@@ -42,6 +46,8 @@ local utils = import './lib/utils.libsonnet';
         grafana: 'grafana/grafana:' + $.values.common.versions.grafana,
         kubeStateMetrics: 'k8s.gcr.io/kube-state-metrics/kube-state-metrics:v' + $.values.common.versions.kubeStateMetrics,
         nodeExporter: 'quay.io/prometheus/node-exporter:v' + $.values.common.versions.nodeExporter,
+        powerExporter: 'phyz1x/prometheus-power-exporter:' + $.values.common.versions.powerExporter,
+        powerMeasurementClient: 'phyz1x/powermeasurement-udp-client:' + $.values.common.versions.powerMeasurementClient,
         prometheus: 'quay.io/prometheus/prometheus:v' + $.values.common.versions.prometheus,
         prometheusAdapter: 'k8s.gcr.io/prometheus-adapter/prometheus-adapter:v' + $.values.common.versions.prometheusAdapter,
         prometheusOperator: 'quay.io/prometheus-operator/prometheus-operator:v' + $.values.common.versions.prometheusOperator,
@@ -91,6 +97,16 @@ local utils = import './lib/utils.libsonnet';
       mixin+: { ruleLabels: $.values.common.ruleLabels },
       kubeRbacProxyImage: $.values.common.images.kubeRbacProxy,
     },
+    powerExporter: {
+      namespace: $.values.common.namespace,
+      version: $.values.common.versions.powerExporter,
+      image: $.values.common.images.powerExporter,
+    },
+    powerMeasurementClient: {
+      namespace: $.values.common.namespace,
+      version: $.values.common.versions.powerMeasurementClient,
+      image: $.values.common.images.powerMeasurementClient,
+    },
     prometheus: {
       namespace: $.values.common.namespace,
       version: $.values.common.versions.prometheus,
@@ -135,6 +151,8 @@ local utils = import './lib/utils.libsonnet';
   grafana: grafana($.values.grafana),
   kubeStateMetrics: kubeStateMetrics($.values.kubeStateMetrics),
   nodeExporter: nodeExporter($.values.nodeExporter),
+  powerExporter: powerExporter($.values.powerExporter),
+  powerMeasurementClient: powerMeasurementClient($.values.powerMeasurementClient),
   prometheus: prometheus($.values.prometheus),
   prometheusAdapter: prometheusAdapter($.values.prometheusAdapter),
   prometheusOperator: prometheusOperator($.values.prometheusOperator),

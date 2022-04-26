@@ -1,5 +1,5 @@
 local kp =
-  (import 'kube-prometheus/main.libsonnet') +
+  (import './jsonnet/kube-prometheus/main.libsonnet') +
   // Uncomment the following imports to enable its patches
   // (import 'kube-prometheus/addons/anti-affinity.libsonnet') +
   // (import 'kube-prometheus/addons/managed-cluster.libsonnet') +
@@ -33,5 +33,7 @@ local kp =
 { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
 { ['kubernetes-' + name]: kp.kubernetesControlPlane[name] for name in std.objectFields(kp.kubernetesControlPlane) }
 { ['node-exporter-' + name]: kp.nodeExporter[name] for name in std.objectFields(kp.nodeExporter) } +
+{ ['power-exporter-' + name]: kp.powerExporter[name] for name in std.objectFields(kp.powerExporter) } +
+{ ['powermeasurement-udp-client-' + name]: kp.powerMeasurementClient[name] for name in std.objectFields(kp.powerMeasurementClient) } +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) }
