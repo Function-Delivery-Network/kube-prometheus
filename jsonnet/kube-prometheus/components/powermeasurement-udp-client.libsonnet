@@ -26,21 +26,26 @@ local defaults = {
 };
 
 function(params) {
-  local ne = self,
+  local client = self,
   _config:: defaults + params,
   // Safety check
-  assert std.isObject(ne._config.resources),
+  assert std.isObject(client._config.resources),
   _metadata:: {
-    name: ne._config.name,
-    namespace: ne._config.namespace,
-    labels: ne._config.commonLabels,
+    name: client._config.name,
+    namespace: client._config.namespace,
+    labels: client._config.commonLabels,
   },
 
   deployment:
     local powerMeasurementClient = {
-      name: ne._config.name,
-      image: ne._config.image,
-      resources: ne._config.resources,
+      name: client._config.name,
+      image: client._config.image,
+      resources: client._config.resources,
+      env: [
+        { name: 'POWERMETER_SERVER_IP', value: "127.0.0.1" },
+        { name: 'POWERMETER_SERVER_PORT', value: "5000" },
+        { name: 'INA3221_CHANNEL', value: "3" },
+      ],
       securityContext: {
           allowPrivilegeEscalation: false,
           readOnlyRootFilesystem: true,
@@ -51,21 +56,17 @@ function(params) {
     {
       apiVersion: 'apps/v1',
       kind: 'Deployment',
-      metadata: ne._metadata,
+      metadata: client._metadata,
       spec: {
         selector: {
-          matchLabels: ne._config.selectorLabels,
-        },
-        updateStrategy: {
-          type: 'RollingUpdate',
-          rollingUpdate: { maxUnavailable: '10%' },
+          matchLabels: client._config.selectorLabels,
         },
         template: {
           metadata: {
             annotations: {
               'kubectl.kubernetes.io/default-container': powerMeasurementClient.name,
             },
-            labels: ne._config.commonLabels,
+            labels: client._config.commonLabels,
           },
           spec: {
             nodeSelector: { 'kubernetes.io/os': 'linux' },

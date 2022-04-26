@@ -25,7 +25,14 @@ spec:
         app.kubernetes.io/version: latest
     spec:
       containers:
-      - image: phyz1x/powermeasurement-udp-client:latest
+      - env:
+        - name: POWERMETER_SERVER_IP
+          value: 127.0.0.1
+        - name: POWERMETER_SERVER_PORT
+          value: "5000"
+        - name: INA3221_CHANNEL
+          value: "3"
+        image: phyz1x/powermeasurement-udp-client:latest
         name: powermeasurement-udp-client
         resources:
           limits:
@@ -52,7 +59,3 @@ spec:
         runAsUser: 65534
       tolerations:
       - operator: Exists
-  updateStrategy:
-    rollingUpdate:
-      maxUnavailable: 10%
-    type: RollingUpdate
