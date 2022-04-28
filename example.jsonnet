@@ -16,6 +16,8 @@ local kp =
     },
   };
 
+local powerMonitoringConfig = import './jsonnet/kube-prometheus/powerMonitoringConfig.json';
+
 { 'setup/0namespace-namespace': kp.kubePrometheus.namespace } +
 {
   ['setup/prometheus-operator-' + name]: kp.prometheusOperator[name]
@@ -23,6 +25,15 @@ local kp =
 } +
 // { 'setup/pyrra-slo-CustomResourceDefinition': kp.pyrra.crd } +
 // serviceMonitor and prometheusRule are separated so that they can be created after the CRDs are ready
+
+// Power Monitoring
+{
+  ['power-monitoring/power-exporter/power-exporter-' + nodeId + '-' + name]: kp.powerExporter[name] 
+  for name in std.filter((function(name) name != 'serviceMonitor' && name != 'service'), std.objectFields(kp.powerExporter)) for nodeId in std.range(1, powerMonitoringConfig.nodeCount)
+} +
+{ 'power-monitoring/power-exporter/power-exporter-serviceMonitor': kp.powerExporter['serviceMonitor'] } +
+{ 'power-monitoring/power-exporter/power-exporter-service': kp.powerExporter['service'] } +
+
 { 'prometheus-operator-serviceMonitor': kp.prometheusOperator.serviceMonitor } +
 { 'prometheus-operator-prometheusRule': kp.prometheusOperator.prometheusRule } +
 { 'kube-prometheus-prometheusRule': kp.kubePrometheus.prometheusRule } +
@@ -33,7 +44,6 @@ local kp =
 { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
 { ['kubernetes-' + name]: kp.kubernetesControlPlane[name] for name in std.objectFields(kp.kubernetesControlPlane) }
 { ['node-exporter-' + name]: kp.nodeExporter[name] for name in std.objectFields(kp.nodeExporter) } +
-{ ['power-exporter-' + name]: kp.powerExporter[name] for name in std.objectFields(kp.powerExporter) } +
 { ['powermeasurement-udp-client-' + name]: kp.powerMeasurementClient[name] for name in std.objectFields(kp.powerMeasurementClient) } +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) }

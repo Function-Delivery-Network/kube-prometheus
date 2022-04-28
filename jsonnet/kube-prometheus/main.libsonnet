@@ -15,6 +15,8 @@ local platformPatch = import './platforms/platforms.libsonnet';
 
 local utils = import './lib/utils.libsonnet';
 
+local powerMonitoringConfig = import 'powerMonitoringConfig.json';
+
 {
   // using `values` as this is similar to helm
   values:: {
@@ -32,8 +34,8 @@ local utils = import './lib/utils.libsonnet';
         grafana: error 'must provide version',
         kubeStateMetrics: error 'must provide version',
         nodeExporter: error 'must provide version',
-        powerMeasurementClient: error 'must provide version',
         powerExporter: error 'must provide version',
+        powerMeasurementClient: error 'must provide version',
         prometheus: error 'must provide version',
         prometheusAdapter: error 'must provide version',
         prometheusOperator: error 'must provide version',
