@@ -73,7 +73,7 @@ function(params) {
 
     {
       apiVersion: 'apps/v1',
-      kind: 'Deployment',
+      kind: 'DaemonSet',
       metadata: pe._metadata,
       spec: {
         selector: {

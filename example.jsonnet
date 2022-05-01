@@ -29,7 +29,7 @@ local powerMonitoringConfig = import './jsonnet/kube-prometheus/powerMonitoringC
 // Power Monitoring
 {
   ['power-monitoring/power-exporter/power-exporter-' + name]: kp.powerExporter[name] for name in std.objectFields(kp.powerExporter)
-}
+} +
 
 { 'prometheus-operator-serviceMonitor': kp.prometheusOperator.serviceMonitor } +
 { 'prometheus-operator-prometheusRule': kp.prometheusOperator.prometheusRule } +
@@ -41,6 +41,6 @@ local powerMonitoringConfig = import './jsonnet/kube-prometheus/powerMonitoringC
 { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
 { ['kubernetes-' + name]: kp.kubernetesControlPlane[name] for name in std.objectFields(kp.kubernetesControlPlane) }
 { ['node-exporter-' + name]: kp.nodeExporter[name] for name in std.objectFields(kp.nodeExporter) } +
-{ ['powermeasurement-udp-client-' + name]: kp.powerMeasurementClient[name] for name in std.objectFields(kp.powerMeasurementClient) } +
+// { ['powermeasurement-udp-client-' + name]: kp.powerMeasurementClient[name] for name in std.objectFields(kp.powerMeasurementClient) } +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) }
