@@ -66,7 +66,7 @@ function(params) {
       resources: pe._config.resources,
       env: [
         { name: 'POWERMETER_SERVER_IP', value: "127.0.0.1" },
-        { name: 'POWERMETER_SERVER_IP', value: "10000" },
+        { name: 'POWERMETER_SERVER_PORT', value: "10000" },
         { name: 'INA3221_CHANNEL', value: "3" },
       ],
     };
