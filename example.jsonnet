@@ -28,11 +28,8 @@ local powerMonitoringConfig = import './jsonnet/kube-prometheus/powerMonitoringC
 
 // Power Monitoring
 {
-  ['power-monitoring/power-exporter/power-exporter-' + nodeId + '-' + name]: kp.powerExporter[name] 
-  for name in std.filter((function(name) name != 'serviceMonitor' && name != 'service'), std.objectFields(kp.powerExporter)) for nodeId in std.range(1, powerMonitoringConfig.nodeCount)
-} +
-{ 'power-monitoring/power-exporter/power-exporter-serviceMonitor': kp.powerExporter['serviceMonitor'] } +
-{ 'power-monitoring/power-exporter/power-exporter-service': kp.powerExporter['service'] } +
+  ['power-monitoring/power-exporter/power-exporter-' + name]: kp.powerExporter[name] for name in std.objectFields(kp.powerExporter)
+}
 
 { 'prometheus-operator-serviceMonitor': kp.prometheusOperator.serviceMonitor } +
 { 'prometheus-operator-prometheusRule': kp.prometheusOperator.prometheusRule } +

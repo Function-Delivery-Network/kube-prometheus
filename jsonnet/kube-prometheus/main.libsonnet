@@ -103,6 +103,7 @@ local powerMonitoringConfig = import 'powerMonitoringConfig.json';
       namespace: $.values.common.namespace,
       version: $.values.common.versions.powerExporter,
       image: $.values.common.images.powerExporter,
+      powerMeasurementClientImage: $.values.common.images.powerMeasurementClient,
     },
     powerMeasurementClient: {
       namespace: $.values.common.namespace,

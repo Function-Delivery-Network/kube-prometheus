@@ -36,7 +36,7 @@ function(params) {
     labels: pe._config.commonLabels,
   },
 
-  deployment:
+  daemonSet:
     local powerExporter = {
       name: pe._config.name,
       image: pe._config.image,
@@ -54,6 +54,21 @@ function(params) {
           readOnlyRootFilesystem: true,
           capabilities: { drop: ['ALL'], add: ['SYS_TIME'] },
       },
+    };
+
+    local powerMeasurementClient = {
+      name: 'powermeasurement-udp-client',
+      image: pe._config.powerMeasurementClientImage,
+      ports: [{
+        name: 'http',
+        containerPort: 5000,
+      }],
+      resources: pe._config.resources,
+      env: [
+        { name: 'POWERMETER_SERVER_IP', value: "127.0.0.1" },
+        { name: 'POWERMETER_SERVER_IP', value: "10000" },
+        { name: 'INA3221_CHANNEL', value: "3" },
+      ],
     };
 
     {
@@ -76,7 +91,7 @@ function(params) {
             tolerations: [{
               operator: 'Exists',
             }],
-            containers: [powerExporter],
+            containers: [powerExporter, powerMeasurementClient],
             priorityClassName: 'system-cluster-critical',
             securityContext: {
               runAsUser: 65534,
