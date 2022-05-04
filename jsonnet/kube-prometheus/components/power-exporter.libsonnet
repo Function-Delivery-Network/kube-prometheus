@@ -66,7 +66,7 @@ function(params) {
       resources: pe._config.resources,
       env: [
         { name: 'NODENAME', valueFrom: { fieldRef: { fieldPath: 'spec.nodeName' } } },
-        { name: 'POWERMONITORING_CONFIG_PATH', value: "./config/power-monitoring.conf"},
+        { name: 'POWERMONITORING_CONFIG_PATH', value: "/config/power-monitoring.conf"},
       ],
       volumeMounts: [
         { name: 'power-monitoring-config', mountPath: '/config/', readOnly: true },
