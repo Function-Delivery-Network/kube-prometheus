@@ -51,12 +51,12 @@ spec:
             - ALL
           readOnlyRootFilesystem: true
       - env:
-        - name: POWERMETER_SERVER_IP
-          value: 127.0.0.1
-        - name: POWERMETER_SERVER_PORT
-          value: "10000"
-        - name: INA3221_CHANNEL
-          value: "3"
+        - name: NODENAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POWERMONITORING_CONFIG_PATH
+          value: ./config/power-monitoring.conf
         image: phyz1x/powermeasurement-udp-client:latest
         name: powermeasurement-udp-client
         ports:
@@ -69,6 +69,10 @@ spec:
           requests:
             cpu: 102m
             memory: 180Mi
+        volumeMounts:
+        - mountPath: /config/
+          name: power-monitoring-config
+          readOnly: true
       hostNetwork: true
       hostPID: true
       nodeSelector:
@@ -79,3 +83,10 @@ spec:
         runAsUser: 65534
       tolerations:
       - operator: Exists
+      volumes:
+      - configMap:
+          items:
+          - key: power-monitoring.conf
+            path: power-monitoring.conf
+          name: power-monitoring-config
+        name: power-monitoring-config

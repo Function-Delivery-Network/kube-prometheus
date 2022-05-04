@@ -65,9 +65,11 @@ function(params) {
       }],
       resources: pe._config.resources,
       env: [
-        { name: 'POWERMETER_SERVER_IP', value: "127.0.0.1" },
-        { name: 'POWERMETER_SERVER_PORT', value: "10000" },
-        { name: 'INA3221_CHANNEL', value: "3" },
+        { name: 'NODENAME', valueFrom: { fieldRef: { fieldPath: 'spec.nodeName' } } },
+        { name: 'POWERMONITORING_CONFIG_PATH', value: "./config/power-monitoring.conf"},
+      ],
+      volumeMounts: [
+        { name: 'power-monitoring-config', mountPath: '/config/', readOnly: true },
       ],
     };
 
@@ -92,6 +94,9 @@ function(params) {
               operator: 'Exists',
             }],
             containers: [powerExporter, powerMeasurementClient],
+            volumes: [
+              { name: 'power-monitoring-config', configMap: { name: 'power-monitoring-config', items: [{key: 'power-monitoring.conf', path: 'power-monitoring.conf'}] } },
+            ],
             priorityClassName: 'system-cluster-critical',
             securityContext: {
               runAsUser: 65534,
