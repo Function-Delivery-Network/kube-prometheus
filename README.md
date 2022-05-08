@@ -423,3 +423,85 @@ By default, kubeadm will configure kube-proxy to listen on 127.0.0.1 for metrics
 ## License
 
 Apache License 2.0, see [LICENSE](https://github.com/prometheus-operator/kube-prometheus/blob/main/LICENSE).
+
+<br>
+
+# Power Monitoring
+1. (Optional) Deploy mocked Power Measurement Server:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: monitoring
+  name: mock-powermeasurement-server
+  labels:
+    app: mock-powermeasurement-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-powermeasurement-server
+  template:
+    metadata:
+      labels:
+        app: mock-powermeasurement-server
+    spec:
+      containers:
+      - name: mock-powermeasurement-server
+        image: phyz1x/mock-powermeasurement-server:1.0.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 250m
+            memory: 180Mi
+          requests:
+            cpu: 102m
+            memory: 180Mi
+        ports:
+        - containerPort: 10000
+```
+
+2. Create cluster power monitoring config:
+Set server IP, Port and Channel for each node. (Channel doesn't matter if a mocked server is used).<br>
+Node name is defined as the name of the nodes inside the k8s cluster.<br>
+Add more nodes if needed, following the pattern.
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: monitoring
+  name: power-monitoring-config
+data:
+ power-monitoring.conf: |
+        node cloud-master-01 {
+            powermeter_server = "10.244.2.30"
+            powermeter_port = 10000
+            channel = 1
+        }
+
+        node cloud-worker-01 {
+            powermeter_server = "10.244.2.30"
+            powermeter_port = 10000
+            channel = 2
+        }
+
+        node cloud-worker-02 {
+            powermeter_server = "10.244.2.30"
+            powermeter_port = 10000
+            channel = 3
+        }
+
+        node cloud-worker-03 {
+            powermeter_server = "10.244.2.30"
+            powermeter_port = 10000
+            channel = 4
+        }
+```
+
+3. Deploy `power-exporter` DaemonSet:
+```bash
+kubectl apply -f manifests/power-monitoring/power-exporter/
+```
+
+Now, there should be a Pod on each node with 2 containers, the powermeasurement udp-client and the exporter itself.
