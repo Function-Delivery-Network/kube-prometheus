@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: power-exporter
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: latest
+    app.kubernetes.io/version: 1.0.0
   name: power-exporter
   namespace: monitoring
 spec:
@@ -22,7 +22,7 @@ spec:
         app.kubernetes.io/component: exporter
         app.kubernetes.io/name: power-exporter
         app.kubernetes.io/part-of: kube-prometheus
-        app.kubernetes.io/version: latest
+        app.kubernetes.io/version: 1.0.0
     spec:
       containers:
       - env:
@@ -30,7 +30,7 @@ spec:
           value: 127.0.0.1
         - name: DEVICE_UDP_PORT
           value: "5000"
-        image: phyz1x/prometheus-power-exporter:latest
+        image: phyz1x/prometheus-power-exporter:1.0.0
         name: power-exporter
         ports:
         - containerPort: 8000
@@ -56,8 +56,8 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         - name: POWERMONITORING_CONFIG_PATH
-          value: ./config/power-monitoring.conf
-        image: phyz1x/powermeasurement-udp-client:latest
+          value: /config/power-monitoring.conf
+        image: phyz1x/powermeasurement-udp-client:1.0.0
         name: powermeasurement-udp-client
         ports:
         - containerPort: 5000

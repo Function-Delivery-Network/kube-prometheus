@@ -16,8 +16,6 @@ local kp =
     },
   };
 
-local powerMonitoringConfig = import './jsonnet/kube-prometheus/powerMonitoringConfig.json';
-
 { 'setup/0namespace-namespace': kp.kubePrometheus.namespace } +
 {
   ['setup/prometheus-operator-' + name]: kp.prometheusOperator[name]
@@ -41,6 +39,5 @@ local powerMonitoringConfig = import './jsonnet/kube-prometheus/powerMonitoringC
 { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
 { ['kubernetes-' + name]: kp.kubernetesControlPlane[name] for name in std.objectFields(kp.kubernetesControlPlane) }
 { ['node-exporter-' + name]: kp.nodeExporter[name] for name in std.objectFields(kp.nodeExporter) } +
-// { ['powermeasurement-udp-client-' + name]: kp.powerMeasurementClient[name] for name in std.objectFields(kp.powerMeasurementClient) } +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) }

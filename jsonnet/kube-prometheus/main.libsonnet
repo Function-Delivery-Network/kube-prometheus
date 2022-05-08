@@ -6,7 +6,6 @@ local kubeStateMetrics = import './components/kube-state-metrics.libsonnet';
 local customMixin = import './components/mixin/custom.libsonnet';
 local nodeExporter = import './components/node-exporter.libsonnet';
 local powerExporter = import './components/power-exporter.libsonnet';
-local powerMeasurementClient = import './components/powermeasurement-udp-client.libsonnet';
 local prometheusAdapter = import './components/prometheus-adapter.libsonnet';
 local prometheusOperator = import './components/prometheus-operator.libsonnet';
 local prometheus = import './components/prometheus.libsonnet';
@@ -14,8 +13,6 @@ local prometheus = import './components/prometheus.libsonnet';
 local platformPatch = import './platforms/platforms.libsonnet';
 
 local utils = import './lib/utils.libsonnet';
-
-local powerMonitoringConfig = import 'powerMonitoringConfig.json';
 
 {
   // using `values` as this is similar to helm
@@ -105,11 +102,6 @@ local powerMonitoringConfig = import 'powerMonitoringConfig.json';
       image: $.values.common.images.powerExporter,
       powerMeasurementClientImage: $.values.common.images.powerMeasurementClient,
     },
-    powerMeasurementClient: {
-      namespace: $.values.common.namespace,
-      version: $.values.common.versions.powerMeasurementClient,
-      image: $.values.common.images.powerMeasurementClient,
-    },
     prometheus: {
       namespace: $.values.common.namespace,
       version: $.values.common.versions.prometheus,
@@ -155,7 +147,6 @@ local powerMonitoringConfig = import 'powerMonitoringConfig.json';
   kubeStateMetrics: kubeStateMetrics($.values.kubeStateMetrics),
   nodeExporter: nodeExporter($.values.nodeExporter),
   powerExporter: powerExporter($.values.powerExporter),
-  powerMeasurementClient: powerMeasurementClient($.values.powerMeasurementClient),
   prometheus: prometheus($.values.prometheus),
   prometheusAdapter: prometheusAdapter($.values.prometheusAdapter),
   prometheusOperator: prometheusOperator($.values.prometheusOperator),
