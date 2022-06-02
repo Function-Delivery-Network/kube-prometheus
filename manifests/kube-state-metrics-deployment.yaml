@@ -101,5 +101,5 @@ spec:
           runAsNonRoot: true
           runAsUser: 65532
       nodeSelector:
-        kubernetes.io/os: linux
+        node-role.kubernetes.io/master: "true"
       serviceAccountName: kube-state-metrics

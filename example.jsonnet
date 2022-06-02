@@ -24,11 +24,6 @@ local kp =
 // { 'setup/pyrra-slo-CustomResourceDefinition': kp.pyrra.crd } +
 // serviceMonitor and prometheusRule are separated so that they can be created after the CRDs are ready
 
-// Power Monitoring
-{
-  ['power-monitoring/power-exporter/power-exporter-' + name]: kp.powerExporter[name] for name in std.objectFields(kp.powerExporter)
-} +
-
 { 'prometheus-operator-serviceMonitor': kp.prometheusOperator.serviceMonitor } +
 { 'prometheus-operator-prometheusRule': kp.prometheusOperator.prometheusRule } +
 { 'kube-prometheus-prometheusRule': kp.kubePrometheus.prometheusRule } +
@@ -39,5 +34,6 @@ local kp =
 { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
 { ['kubernetes-' + name]: kp.kubernetesControlPlane[name] for name in std.objectFields(kp.kubernetesControlPlane) }
 { ['node-exporter-' + name]: kp.nodeExporter[name] for name in std.objectFields(kp.nodeExporter) } +
+{ ['power-exporter-' + name]: kp.powerExporter[name] for name in std.objectFields(kp.powerExporter) } +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) }

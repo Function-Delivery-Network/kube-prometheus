@@ -89,7 +89,7 @@ function(params) {
             labels: pe._config.commonLabels,
           },
           spec: {
-            nodeSelector: { 'kubernetes.io/os': 'linux' },
+            nodeSelector: { 'nodetype': 'edge' },
             tolerations: [{
               operator: 'Exists',
             }],

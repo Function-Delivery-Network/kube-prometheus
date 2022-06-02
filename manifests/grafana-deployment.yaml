@@ -141,7 +141,7 @@ spec:
           name: grafana-config
           readOnly: false
       nodeSelector:
-        kubernetes.io/os: linux
+        node-role.kubernetes.io/master: "true"
       securityContext:
         fsGroup: 65534
         runAsNonRoot: true

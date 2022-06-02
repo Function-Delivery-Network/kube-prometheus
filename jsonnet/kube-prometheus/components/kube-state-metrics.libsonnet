@@ -167,6 +167,7 @@ function(params) (import 'github.com/kubernetes/kube-state-metrics/jsonnet/kube-
             args: ['--host=127.0.0.1', '--port=8081', '--telemetry-host=127.0.0.1', '--telemetry-port=8082'],
             resources: ksm._config.resources,
           }, super.containers) + [kubeRbacProxyMain, kubeRbacProxySelf],
+          nodeSelector: { 'node-role.kubernetes.io/master': 'true' },
         },
       },
     },

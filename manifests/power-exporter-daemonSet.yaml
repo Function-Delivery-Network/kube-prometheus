@@ -76,7 +76,7 @@ spec:
       hostNetwork: true
       hostPID: true
       nodeSelector:
-        kubernetes.io/os: linux
+        nodetype: edge
       priorityClassName: system-cluster-critical
       securityContext:
         runAsNonRoot: true
