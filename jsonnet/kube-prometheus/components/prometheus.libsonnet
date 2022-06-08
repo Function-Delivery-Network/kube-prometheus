@@ -330,7 +330,7 @@ function(params) {
       ruleSelector: p._config.ruleSelector,
       serviceMonitorSelector: {},
       serviceMonitorNamespaceSelector: {},
-      nodeSelector: { 'kubernetes.io/os': 'linux' },
+      nodeSelector: { 'nodetype': 'cloud' },
       resources: p._config.resources,
       alerting: if p._config.alerting != {} then p._config.alerting else {
         alertmanagers: [{

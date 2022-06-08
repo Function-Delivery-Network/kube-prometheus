@@ -116,6 +116,7 @@ function(params)
         template+: {
           spec+: {
             automountServiceAccountToken: false,
+            nodeSelector: { 'nodetype': 'cloud' },
           },
         },
       },

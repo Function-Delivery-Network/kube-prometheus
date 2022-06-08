@@ -159,6 +159,7 @@ function(params) (import 'github.com/kubernetes/kube-state-metrics/jsonnet/kube-
           },
         },
         spec+: {
+          nodeSelector: { 'nodetype': 'cloud' },
           automountServiceAccountToken: true,
           containers: std.map(function(c) c {
             ports:: null,

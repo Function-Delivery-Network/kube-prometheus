@@ -20,7 +20,7 @@ spec:
   externalLabels: {}
   image: quay.io/prometheus/prometheus:v2.36.0
   nodeSelector:
-    kubernetes.io/os: linux
+    nodetype: cloud
   podMetadata:
     labels:
       app.kubernetes.io/component: prometheus
