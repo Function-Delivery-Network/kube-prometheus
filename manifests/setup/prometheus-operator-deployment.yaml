@@ -75,7 +75,7 @@ spec:
           runAsNonRoot: true
           runAsUser: 65532
       nodeSelector:
-        node-role.kubernetes.io/master: "true"
+        nodetype: cloud
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

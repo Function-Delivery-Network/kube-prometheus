@@ -116,7 +116,7 @@ function(params)
         template+: {
           spec+: {
             automountServiceAccountToken: false,
-            nodeSelector: { 'node-role.kubernetes.io/master': 'true' }
+            nodeSelector: { 'nodetype': 'cloud' }
           },
         },
       },

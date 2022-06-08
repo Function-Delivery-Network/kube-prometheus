@@ -317,7 +317,7 @@ function(params) {
       ruleSelector: p._config.ruleSelector,
       serviceMonitorSelector: {},
       serviceMonitorNamespaceSelector: {},
-      nodeSelector: { 'node-role.kubernetes.io/master': 'true' },
+      nodeSelector: { 'nodetype': 'cloud' },
       resources: p._config.resources,
       alerting: if p._config.alerting != {} then p._config.alerting else {
         alertmanagers: [{

@@ -157,7 +157,7 @@ function(params)
           spec+: {
             automountServiceAccountToken: true,
             containers+: [kubeRbacProxy],
-            nodeSelector: { 'node-role.kubernetes.io/master': 'true' },
+            nodeSelector: { 'nodetype': 'cloud' },
           },
         },
       },

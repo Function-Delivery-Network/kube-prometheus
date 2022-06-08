@@ -289,7 +289,7 @@ function(params) {
             containers: [c],
             serviceAccountName: $.serviceAccount.metadata.name,
             automountServiceAccountToken: true,
-            nodeSelector: { 'node-role.kubernetes.io/master': 'true' },
+            nodeSelector: { 'nodetype': 'cloud' },
             volumes: [
               { name: 'tmpfs', emptyDir: {} },
               { name: 'volume-serving-cert', emptyDir: {} },

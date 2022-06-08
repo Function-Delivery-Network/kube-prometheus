@@ -238,7 +238,7 @@ function(params) {
           },
           spec: {
             containers: [blackboxExporter, reloader, kubeRbacProxy],
-            nodeSelector: { 'node-role.kubernetes.io/master': 'true' },
+            nodeSelector: { 'nodetype': 'cloud' },
             automountServiceAccountToken: true,
             serviceAccountName: 'blackbox-exporter',
             volumes: [{

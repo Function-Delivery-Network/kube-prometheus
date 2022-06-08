@@ -107,7 +107,7 @@ spec:
           runAsNonRoot: true
           runAsUser: 65532
       nodeSelector:
-        node-role.kubernetes.io/master: "true"
+        nodetype: cloud
       serviceAccountName: blackbox-exporter
       volumes:
       - configMap:
